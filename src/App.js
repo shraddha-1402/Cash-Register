@@ -36,6 +36,7 @@ function App() {
   const [cashPaid, setCashPaid] = useState(0);
   const [showCashPaidInput, setShowCashPaidInput] = useState(false);
   const [status, setStatus] = useState("");
+  const [showTable, setShowTable] = useState(false);
 
   const nextInputHandler = () => {
     if (cashToPay === 0)
@@ -56,6 +57,8 @@ function App() {
       setStatus("Cash Amount Cannot Be Empty");
     else if (cashPaid < cashToPay)
       setStatus("Cash Paid Cannot Be Less than Cash Amount");
+    else if (cashPaid === cashToPay)
+      setStatus("No cash to return");
     else {
       let toReturn = cashPaid - cashToPay;
       let i = 0;
@@ -66,24 +69,83 @@ function App() {
         ++i;
       }
       setStatus("Total Notes to return: ");
+      setShowTable(true);
       setCash(tempCash);
     }
   }
 
   return (
     <div className="App">
-      <input type="number" name="toPay" placeholder="enter cash to pay" onChange={usrInputHandler} />
-      <button onClick={nextInputHandler}>Next</button>
-      {showCashPaidInput && <div>
-        <input type="number" name="paid" placeholder="enter cash given" onChange={usrInputHandler} />
-        <button onClick={changeReturnHandler}>Check</button>
-      </div>}
-      <div> {status} </div>
-      {
-        cash.map((note, index) => {
-          return <div key={index}>{note.note}: {note.count}</div>
-        })
+      <h1 className="heading">Cash Register</h1>
+      <p className="description">This app takes the payble amount and the paid amount and gives the minimum change that one needs to return to the customer.
+        </p>
+      <label className="label-inputField" htmlFor="toPay">Bill Amount:</label>
+      <input
+        type="number"
+        name="toPay"
+        placeholder="enter cash to pay"
+        min="0"
+        onChange={usrInputHandler}
+        className="inputField"
+      />
+      <button
+        onClick={nextInputHandler}
+        className="button">
+        Next
+        </button>
+      {showCashPaidInput &&
+        <div className="second-inputField">
+          <label className="label-inputField" htmlFor="paid">Cash Given:</label>
+
+          <input
+            type="number"
+            name="paid"
+            placeholder="enter cash given"
+            min="0"
+            onChange={usrInputHandler}
+            className="inputField"
+          />
+          <button
+            onClick={changeReturnHandler}
+            className="button">
+            Check
+          </button>
+        </div>
       }
+      <div className="status"> {status} </div>
+
+      {showTable &&
+        <table className="table">
+          <thead>
+            <tr className="table-row">
+              <th className="table-heading"> Notes </th>
+              <th className="table-heading"> Count </th>
+            </tr>
+          </thead>
+          {
+            cash.map((note, index) => {
+              return <tbody key={index}>
+                <tr className="table-row">
+                  <td className="table-column"> {note.note} </td>
+                  <td className="table-column"> {note.count === 0 ? "-" : note.count} </td>
+                </tr>
+              </tbody>
+            })
+          }
+        </table>
+      }
+      <footer>
+        <h3>Let's Connect</h3>
+        <a href="https://github.com/shraddha-1402" rel="noreferrer noopener" target="_blank" className="link">
+          <span className="fa fa-github" aria-hidden="true"></span>
+        </a>
+        <a href="https://twitter.com/ShraddhaGupta08" rel="noreferrer noopener" target="_blank" className="link">
+          <span className="fa fa-twitter" aria-hidden="true"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/shraddha-1402/" rel="noreferrer noopener" target="_blank" className="link">
+          <span className="fa fa-linkedin" aria-hidden="true"></span>
+        </a>
+      </footer>
     </div>
   );
 }
