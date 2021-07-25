@@ -40,7 +40,7 @@ function App() {
 
   const nextInputHandler = () => {
     if (cashToPay === 0)
-      setStatus("Cash To Pay Cannot Be Empty");
+      setStatus("Bill Amount Cannot Be Empty");
     else
       setShowCashPaidInput(true);
   }
@@ -54,11 +54,11 @@ function App() {
 
   const changeReturnHandler = () => {
     if (cashPaid === 0)
-      setStatus("Cash Amount Cannot Be Empty");
+      setStatus("Cash Given Cannot Be Empty");
     else if (cashPaid < cashToPay)
-      setStatus("Cash Paid Cannot Be Less than Cash Amount");
+      setStatus("Cash Given Cannot Be Less Than Bill Amount");
     else if (cashPaid === cashToPay)
-      setStatus("No cash to return");
+      setStatus("No Cash To Return");
     else {
       let toReturn = cashPaid - cashToPay;
       let i = 0;
@@ -68,7 +68,7 @@ function App() {
         toReturn -= tempCash[i].count * tempCash[i].note;
         ++i;
       }
-      setStatus("Total Notes to return: ");
+      setStatus("Total Notes To Return: ");
       setShowTable(true);
       setCash(tempCash);
     }
@@ -77,7 +77,7 @@ function App() {
   return (
     <div className="App">
       <h1 className="heading">Cash Register</h1>
-      <p className="description">This app takes the payble amount and the paid amount and gives the minimum change that one needs to return to the customer.
+      <p className="description">Enter the bill amount you need to pay and the cash given and the app will tell you how many notes you need back!
         </p>
       <label className="label-inputField" htmlFor="toPay">Bill Amount:</label>
       <input

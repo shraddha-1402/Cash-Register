@@ -4,7 +4,7 @@
 
 This app takes the payble amount and the paid amount and gives the minimum change that one needs to return to the customer.
 
-**Head to [Cash Register](#) and use the app to make your life easy!**
+**Head to [Cash Register](https://cash-register-management.netlify.app/) and use the app to make your life easy!**
 
 
 ## Tech-Stack
