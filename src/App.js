@@ -35,6 +35,7 @@ function App() {
   const [cashToPay, setCashToPay] = useState(0);
   const [cashPaid, setCashPaid] = useState(0);
   const [showCashPaidInput, setShowCashPaidInput] = useState(false);
+  const [totalCash, setTotalCash] = useState(0);
   const [status, setStatus] = useState("");
   const [showTable, setShowTable] = useState(false);
 
@@ -61,6 +62,7 @@ function App() {
       setStatus("No Cash To Return");
     else {
       let toReturn = cashPaid - cashToPay;
+      setTotalCash(toReturn);
       let i = 0;
       while (toReturn > 0) {
         if (toReturn >= tempCash[i].note)
@@ -68,7 +70,7 @@ function App() {
         toReturn -= tempCash[i].count * tempCash[i].note;
         ++i;
       }
-      setStatus("Total Notes To Return: ");
+      setStatus("");
       setShowTable(true);
       setCash(tempCash);
     }
@@ -113,7 +115,7 @@ function App() {
         </div>
       }
       <div className="status"> {status} </div>
-
+      <div className="total-cash">{totalCash === 0 ? "" : <span>Total Cash to Return: {totalCash} Rs</span>}</div>
       {showTable &&
         <table className="table">
           <thead>
