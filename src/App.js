@@ -32,7 +32,7 @@ var tempCash = [{
 
 function App() {
   const [cash, setCash] = useState([]);
-  const [cashToPay, setCashToPay] = useState(0);
+  const [cashToPay, setCashToPay] = useState(-1);
   const [cashPaid, setCashPaid] = useState(0);
   const [showCashPaidInput, setShowCashPaidInput] = useState(false);
   const [totalCash, setTotalCash] = useState(0);
@@ -40,22 +40,31 @@ function App() {
   const [showTable, setShowTable] = useState(false);
 
   const nextInputHandler = () => {
-    if (cashToPay === 0)
+    if (cashToPay === -1)
       setStatus("Bill Amount Cannot Be Empty");
-    else
+    else if (cashToPay < 0)
+      setStatus("Bill Amount Cannot Be Negative");
+    else {
       setShowCashPaidInput(true);
+      setStatus("");
+    }
   }
 
   const usrInputHandler = (e) => {
-    if (e.target.name === "toPay")
+    if (e.target.name === "toPay") {
       setCashToPay(parseInt(e.target.value));
+      setShowCashPaidInput(false);
+    }
     else
       setCashPaid(parseInt(e.target.value));
+    setShowTable(false);
   }
 
   const changeReturnHandler = () => {
-    if (cashPaid === 0)
+    if (cashPaid === -1)
       setStatus("Cash Given Cannot Be Empty");
+    else if (cashPaid < 0)
+      setStatus("Cash Given Cannot Be Negative");
     else if (cashPaid < cashToPay)
       setStatus("Cash Given Cannot Be Less Than Bill Amount");
     else if (cashPaid === cashToPay)
@@ -86,15 +95,14 @@ function App() {
         type="number"
         name="toPay"
         placeholder="enter cash to pay"
-        min="0"
         onChange={usrInputHandler}
         className="inputField"
       />
-      <button
+      {!showCashPaidInput && <button
         onClick={nextInputHandler}
         className="button">
         Next
-        </button>
+        </button>}
       {showCashPaidInput &&
         <div className="second-inputField">
           <label className="label-inputField" htmlFor="paid">Cash Given:</label>
@@ -115,7 +123,11 @@ function App() {
         </div>
       }
       <div className="status"> {status} </div>
-      <div className="total-cash">{totalCash === 0 ? "" : <span>Total Cash to Return: {totalCash} Rs</span>}</div>
+      {
+        showTable &&
+        <div className="total-cash">{totalCash === 0 ? "" : <span>Total Cash to Return: {totalCash} Rs</span>}</div>
+      }
+
       {showTable &&
         <table className="table">
           <thead>
